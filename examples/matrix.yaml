@@ -1,0 +1,18 @@
+thresholds:
+  normal: 4.5
+  large: 3.0
+  aaa_normal: 7.0
+backgrounds:
+  surface: "#ffffff"
+  surface-alt: "#f4f4f5"
+  overlay: "rgba(0,0,0,0.6) over #3b82f6"
+tokens:
+  - name: text-primary
+    color: "#18181b"
+    over: [surface, surface-alt]
+    level: normal
+  - name: text-on-overlay
+    color: "rgba(255,255,255,0.9)"
+    over: [overlay]
+    level: large
+

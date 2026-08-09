@@ -1,0 +1,41 @@
+{
+  "failure_count": 0,
+  "level": "aa",
+  "passed": true,
+  "results": [
+    {
+      "comparisons": [
+        {
+          "background": "overlay",
+          "ratio": 10.26741
+        }
+      ],
+      "level": "large",
+      "name": "text-on-overlay",
+      "passed": true,
+      "threshold": 3.0,
+      "worst_background": "overlay",
+      "worst_ratio": 10.26741
+    },
+    {
+      "comparisons": [
+        {
+          "background": "surface",
+          "ratio": 17.716765
+        },
+        {
+          "background": "surface-alt",
+          "ratio": 16.118381
+        }
+      ],
+      "level": "normal",
+      "name": "text-primary",
+      "passed": true,
+      "threshold": 4.5,
+      "worst_background": "surface-alt",
+      "worst_ratio": 16.118381
+    }
+  ],
+  "token_count": 2,
+  "wcag_version": "WCAG 2.x"
+}
