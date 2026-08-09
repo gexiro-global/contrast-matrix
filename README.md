@@ -48,6 +48,10 @@ and `mix(first, second, t)`, where `t` ranges from 0 to 1. Each token requires a
 or override names. `--level aaa` maps `normal` and `large` to their AAA counterparts, while
 `--fail-under N` overrides every token's threshold.
 
+Derived expressions may use background names as operands (for example,
+`rgba(0,0,0,.5) over surface`); references may be nested or chained, and unknown or cyclic
+references are rejected as input errors.
+
 ## Why a matrix?
 
 Pairwise checkers answer whether one foreground works on one background. Design tokens often render
@@ -80,4 +84,3 @@ pytest -q
 Built and maintained by [Gexiro Global Enterprises Ltd](https://gexiro.com).
 
 Part of the [Gexiro open-source toolkit](https://github.com/gexiro-global).
-

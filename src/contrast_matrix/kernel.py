@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import colorsys
+import math
 import re
 from typing import Tuple
 
@@ -28,7 +29,7 @@ def _number(text: str, label: str) -> float:
 def _channel(text: str) -> float:
     text = text.strip()
     if text.endswith("%"):
-        value = _number(text[:-1], "channel percentage") * 2.55
+        value = _number(text[:-1], "channel percentage") * 255 / 100
     else:
         value = _number(text, "channel")
     if not 0 <= value <= 255:
@@ -67,8 +68,12 @@ def parse_color(value: str) -> RGBA:
         raise ColorError("{}() requires {} comma-separated values".format(function, expected))
     alpha = _alpha(parts[3]) if expected == 4 else 1.0
     if function.lower().startswith("rgb"):
+        percentage_channels = [part.endswith("%") for part in parts[:3]]
+        if any(percentage_channels) and not all(percentage_channels):
+            raise ColorError("RGB channels must be either all numbers or all percentages")
         return (_channel(parts[0]), _channel(parts[1]), _channel(parts[2]), alpha)
-    hue = _number(parts[0].removesuffix("deg"), "hue") % 360
+    hue_text = parts[0][:-3] if parts[0].lower().endswith("deg") else parts[0]
+    hue = _number(hue_text, "hue") % 360
     if not parts[1].endswith("%") or not parts[2].endswith("%"):
         raise ColorError("HSL saturation and lightness must be percentages")
     saturation = _number(parts[1][:-1], "saturation") / 100
@@ -85,6 +90,18 @@ def over(fg_rgba: RGBA, bg_rgb: RGB) -> RGB:
     return tuple(fg_rgba[i] * alpha + bg_rgb[i] * (1 - alpha) for i in range(3))  # type: ignore[return-value]
 
 
+def composite(foreground: RGBA, background: RGBA) -> RGBA:
+    """Composite one RGBA color over another without discarding alpha."""
+    alpha = foreground[3] + background[3] * (1 - foreground[3])
+    if alpha == 0:
+        return (0.0, 0.0, 0.0, 0.0)
+    channels = tuple(
+        (foreground[i] * foreground[3] + background[i] * background[3] * (1 - foreground[3])) / alpha
+        for i in range(3)
+    )
+    return channels + (alpha,)  # type: ignore[return-value]
+
+
 def mix(a: RGBA, b: RGBA, t: float) -> RGBA:
     """Linearly interpolate from color a (t=0) to b (t=1), including alpha."""
     if not 0 <= t <= 1:
@@ -94,6 +111,8 @@ def mix(a: RGBA, b: RGBA, t: float) -> RGBA:
 
 def relative_luminance(rgb: RGB) -> float:
     """Return WCAG 2.x sRGB relative luminance."""
+    if len(rgb) != 3 or any(not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value) or not 0 <= value <= 255 for value in rgb):
+        raise ColorError("RGB channels must be finite numbers within 0..255")
     def linear(channel: float) -> float:
         channel /= 255
         return channel / 12.92 if channel <= 0.04045 else ((channel + 0.055) / 1.055) ** 2.4
@@ -104,4 +123,3 @@ def contrast_ratio(first: RGB, second: RGB) -> float:
     """Return the WCAG 2.x contrast ratio of two opaque colors."""
     light, dark = sorted((relative_luminance(first), relative_luminance(second)), reverse=True)
     return (light + 0.05) / (dark + 0.05)
-

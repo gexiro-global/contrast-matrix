@@ -37,7 +37,13 @@ def test_hsl_forms():
     assert parse_color("hsl(360, 100%, 50%)") == pytest.approx((255, 0, 0, 1))
 
 
-@pytest.mark.parametrize("text", ["", "red", "#12", "#ggg", "rgb(0,0)", "rgb(256,0,0)", "rgba(0,0,0,2)", "hsl(0,2,3)", "hsl(0,101%,50%)"])
+@pytest.mark.parametrize("text", [
+    "", "none", "red", "#12", "#12345", "#ggg", "#ff ff ff", "rgb(0,0)",
+    "rgb(0,0,0,0)", "rgba(0,0,0)", "rgb(256,0,0)", "rgb(-1,0,0)",
+    "rgb(0%,0,0)",
+    "rgba(0,0,0,2)", "rgba(0,0,0,-.1)", "hsl(0,2,3)",
+    "hsl(0,101%,50%)", "hsl(0,-1%,50%)", "hsl(0,50%,50%,1)",
+])
 def test_invalid_colors_are_rejected(text):
     with pytest.raises(ColorError):
         parse_color(text)
@@ -56,3 +62,11 @@ def test_mix_and_luminance():
     with pytest.raises(ColorError):
         mix((0, 0, 0, 1), (1, 1, 1, 1), 1.1)
 
+
+def test_uppercase_float_and_range_forms():
+    assert parse_color(" RGB(1.5, 2.5, 3.5) ") == (1.5, 2.5, 3.5, 1)
+    assert parse_color("HSLA(-120DEG, 100%, 50%, 100%)") == pytest.approx((0, 0, 255, 1))
+    with pytest.raises(ColorError):
+        relative_luminance((-1, 0, 0))
+    with pytest.raises(ColorError):
+        relative_luminance((math.nan, 0, 0))

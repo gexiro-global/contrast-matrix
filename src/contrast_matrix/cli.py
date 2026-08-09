@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 from typing import Any, Mapping, Sequence
@@ -47,8 +48,8 @@ def render_sarif(result: Mapping[str, Any], path: Path) -> Mapping[str, Any]:
 
 def main(argv: Sequence[str] = None) -> int:
     args = build_parser().parse_args(argv)
-    if args.fail_under is not None and args.fail_under <= 0:
-        print("contrast-matrix: error: --fail-under must be positive", file=sys.stderr)
+    if args.fail_under is not None and (not math.isfinite(args.fail_under) or args.fail_under <= 0):
+        print("contrast-matrix: error: --fail-under must be a positive finite number", file=sys.stderr)
         return 2
     try:
         result = evaluate_matrix(load_matrix(args.matrix), args.level, args.fail_under)
@@ -62,4 +63,3 @@ def main(argv: Sequence[str] = None) -> int:
     else:
         print(json.dumps(render_sarif(result, args.matrix), indent=2, sort_keys=True))
     return 0 if result["passed"] else 1
-
