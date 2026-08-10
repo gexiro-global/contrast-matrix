@@ -9,6 +9,7 @@ description = "CI-first WCAG contrast matrix checking for design tokens."
 readme = "README.md"
 requires-python = ">=3.9"
 license = "Apache-2.0"
+license-files = ["LICENSE"]
 authors = [{name = "Gexiro Global Enterprises Ltd"}]
 keywords = ["wcag", "accessibility", "contrast", "design-tokens", "ci"]
 classifiers = [
@@ -33,6 +34,9 @@ contrast-matrix = "contrast_matrix.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+contrast_matrix = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
