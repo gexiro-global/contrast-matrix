@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- No unreleased changes.
+
+## [0.1.1] - 2026-08-10
+
 - Bound build, runtime/optional, and development dependencies to tested next-major ceilings,
   and complete the package classifiers.
 - Ship the inline type-information marker and explicit license-file metadata.
