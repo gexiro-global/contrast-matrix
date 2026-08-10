@@ -23,7 +23,7 @@ dependencies = []
 
 [project.optional-dependencies]
 yaml = ["PyYAML>=6.0,<7"]
-dev = ["pytest>=8,<9", "build>=1,<2"]
+dev = ["pytest>=8,<10", "build>=1,<2"]
 
 [project.urls]
 Homepage = "https://github.com/gexiro-global/contrast-matrix"
