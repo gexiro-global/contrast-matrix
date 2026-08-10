@@ -10,9 +10,9 @@ A CI-first WCAG color-contrast matrix checker for design tokens, with no browser
 ## Quickstart
 
 ```bash
-pip install contrast-matrix
-contrast-matrix check matrix.json
-contrast-matrix check matrix.yaml --format sarif --level aaa
+pip install "contrast-matrix[yaml]"
+contrast-matrix check examples/matrix.yaml
+contrast-matrix check examples/matrix.yaml --format sarif --level aaa
 ```
 
 JSON support uses only the Python standard library. Install `contrast-matrix[yaml]` to read YAML.
