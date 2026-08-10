@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68,<82", "wheel>=0.41,<1"]
+requires = ["setuptools>=68,<77", "wheel>=0.41,<1"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,22 +8,26 @@ version = "0.1.0"
 description = "CI-first WCAG contrast matrix checking for design tokens."
 readme = "README.md"
 requires-python = ">=3.9"
-license = "Apache-2.0"
-license-files = ["LICENSE"]
+license = {file = "LICENSE"}
 authors = [{name = "Gexiro Global Enterprises Ltd"}]
 keywords = ["wcag", "accessibility", "contrast", "design-tokens", "ci"]
 classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Quality Assurance",
+  "Typing :: Typed",
 ]
 dependencies = []
 
 [project.optional-dependencies]
 yaml = ["PyYAML>=6.0,<7"]
-dev = ["pytest>=8,<9", "build>=1,<2"]
+dev = ["pytest>=8,<10", "build>=1,<2"]
 
 [project.urls]
 Homepage = "https://github.com/gexiro-global/contrast-matrix"
